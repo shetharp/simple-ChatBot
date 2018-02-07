@@ -91,7 +91,7 @@ function bot(data,socket,questionNum) {
   responses.push(input)
   answer= ''// output response
   waitTime =0;
-  question = 'Ok, ' + responses[0] + ', maybe this is personal, but what excites you about them?';			    	// load next question
+  question = 'Ok, ' + responses[0] + ', maybe this is personal, but what about their background excites you the most?';			    	// load next question
   }    
   
   else if (questionNum == 4) {
@@ -138,10 +138,10 @@ function bot(data,socket,questionNum) {
       answer += "I found out about you " + responses[2];
     }
     answer += ". I am currently working on " + responses[4]
-    answer += ". This made me think of " + responses[3]
-    answer += ", which I found to be incredibly fascinating. I'd love to pick your brain a bit more."
-    answer += "Would you be available for a quick chat this " + responses[5] + " " + responses[6] + "?"
-    answer += "I appreciate your time! --" + responses[7]
+    answer += ". This made me think of your background in " + responses[3]
+    answer += ", which I found to be incredibly fascinating. I'd love to pick your brain a bit more"
+    answer += ". Would you be available for a quick chat this " + responses[5] + " " + responses[6]
+    answer += "? I appreciate your time! --" + responses[7]
     
     waitTime =0;
     question = '';

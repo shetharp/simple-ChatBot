@@ -81,7 +81,7 @@ function bot(data,socket,questionNum) {
     else{
       met = false;
       answer = "I mean, hey, you and I have never met in person!";
-      waitTime =2500;
+      waitTime =300;
       question = 'How did you find out about them?';
     }
   // load next question
@@ -132,10 +132,10 @@ function bot(data,socket,questionNum) {
   else{
     answer= 'Hi ' + responses[1] + ", ";// output response
     if(met){
-      answer += "We met " + responses[2];
+      answer += "We met at " + responses[2];
     }
     else{
-      answer += "I found out about you " + responses[2];
+      answer += "I found out about you through " + responses[2];
     }
     answer += ". I am currently working on " + responses[4]
     answer += ". This made me think of your background in " + responses[3]

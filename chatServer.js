@@ -22,6 +22,12 @@ http.listen(serverPort, function() {
 //----------------------------------------------------------------------------//
 
 
+//------------------------- GLOBAL VARIABLES --------------------------------//
+var met = false;
+var responses = []
+
+
+
 //---------------------- WEBSOCKET COMMUNICATION -----------------------------//
 // this is the websocket event handler and say if someone connects
 // as long as someone is connected, listen for messages
@@ -30,8 +36,9 @@ io.on('connect', function(socket) {
   var questionNum = 0; // keep count of question, used for IF condition.
   socket.on('loaded', function(){// we wait until the client has loaded and contacted us that it is ready to go.
 
-  socket.emit('answer',"Hey, Hello I am \"___*-\" a simple chat bot example."); //We start with the introduction;
-  setTimeout(timedQuestion, 2500, socket,"What is your Name?"); // Wait a moment and respond with a question.
+  // socket.emit('answer',"Hey, Hello I am \"IcebreakerBot\" a simple chat bot example."); //We start with the introduction;
+  socket.emit('answer', "Hi there, let's start with a joke to break the ice! ")
+  setTimeout(timedQuestion, 4000, socket,"What do you call someone that avoids awkward hellos?"); // Wait a moment and respond with a question.
 
 });
   socket.on('message', (data)=>{ // If we get a new message from the client we process it;
@@ -48,51 +55,94 @@ function bot(data,socket,questionNum) {
   var answer;
   var question;
   var waitTime;
-
+  
 /// These are the main statments that make up the conversation.
   if (questionNum == 0) {
-  answer= 'Hello ' + input + ' :-)';// output response
-  waitTime =2000;
-  question = 'How old are you?';			    	// load next question
+  responses.push(input + "😎")
+  answer= 'Great, nice to meet you "' + input + '"! 🤣 My name is IcebreakerBot, and I can help you write an introduction email to someone new!';// output response
+  waitTime =7000;
+  question = "What's the name of the person you want to reach out to?";			    	// load next question
   }
+
   else if (questionNum == 1) {
-  answer= 'Really ' + input + ' Years old? So that means you where born in: ' + (2018-parseInt(input));// output response
-  waitTime =2000;
-  question = 'Where do you live?';			    	// load next question
+  responses.push(input)
+  answer= 'Ooh, sounds like ' + input + ' is an important person.'// output response
+  waitTime =3000;
+  question = 'Have you met them before?';			    	// load next question
   }
+  
   else if (questionNum == 2) {
-  answer= ' Cool! I have never been to ' + input+'.';
-  waitTime =2000;
-  question = 'Whats your favorite Color?';			    	// load next question
-  }
-  else if (questionNum == 3) {
-  answer= 'Ok, ' + input+' it is.';
-  socket.emit('changeBG',input.toLowerCase());
-  waitTime = 2000;
-  question = 'Can you still read the font?';			    	// load next question
-  }
-  else if (questionNum == 4) {
     if(input.toLowerCase()==='yes'|| input===1){
-      answer = 'Perfect!';
-      waitTime =2000;
-      question = 'Whats your favorite place?';
+      met = true;
+      answer = "I'm jealous you had that opportunity!";
+      waitTime = 2500;
+      question = 'How did you meet?';
     }
-    else if(input.toLowerCase()==='no'|| input===0){
-        socket.emit('changeFont','white'); /// we really should look up the inverse of what we said befor.
-        answer=''
-        question='How about now?';
-        waitTime =0;
-        questionNum--; // Here we go back in the question number this can end up in a loop
-    }else{
-      answer=' I did not understand you. Can you please answer with simply with yes or no.'
-      question='';
-      questionNum--;
-      waitTime =0;
+    else{
+      met = false;
+      answer = "I mean, hey, you and I have never met in person!";
+      waitTime =2500;
+      question = 'How did you find out about them?';
     }
   // load next question
   }
+  
+  else if (questionNum == 3) {
+  responses.push(input)
+  answer= ''// output response
+  waitTime =0;
+  question = 'Ok, ' + responses[0] + ', maybe this is personal, but what excites you about them?';			    	// load next question
+  }    
+  
+  else if (questionNum == 4) {
+  responses.push(input)
+  answer= 'Wow, I feel like I want to meet ' + responses[1] + ' too!'// output response
+  waitTime = 2500;
+  question = "What are you working on currently that could be of interest to " + responses[1] + "?";			    	// load next question
+  }    
+
+  else if (questionNum == 5) {
+  responses.push(input)
+  answer= 'Time to pull out your calendar!'// output response
+  waitTime = 2500;
+  question = "What day of the week are you the most free to meet within the next few days?";			    	// load next question
+  } 
+  
+  else if (questionNum == 6) {
+  responses.push(input)
+  answer= ''// output response
+  waitTime = 0;
+  question = "What time of the day do you prefer on " + input + "?";			    	// load next question
+  } 
+  
+  else if (questionNum == 7) {
+  responses.push(input)
+  answer= "Ok " + responses[0] + ", maybe we dragged this joke along too far. "// output response
+  waitTime = 3000;
+  question = "What's your real name?";			    	// load next question
+  }
+  
+  else if (questionNum == 8) {
+  responses.push(input)
+  answer= 'Perfect!'// output response
+  waitTime = 1000;
+  question = "I'll show you our email draft, but do you promise not to hurt me if you don't like it?";			    	// load next question
+  } 
+  
   else{
-    answer= 'I have nothing more to say!';// output response
+    answer= 'Hi ' + responses[1] + ", ";// output response
+    if(met){
+      answer += "We met " + responses[2];
+    }
+    else{
+      answer += "I found out about you " + responses[2];
+    }
+    answer += ". I am currently working on " + responses[4]
+    answer += ". This made me think of " + responses[3]
+    answer += ", which I found to be incredibly fascinating. I'd love to pick your brain a bit more."
+    answer += "Would you be available for a quick chat this " + responses[5] + " " + responses[6] + "?"
+    answer += "I appreciate your time! --" + responses[7]
+    
     waitTime =0;
     question = '';
   }
@@ -105,6 +155,7 @@ function bot(data,socket,questionNum) {
 }
 
 function timedQuestion(socket,question) {
+  console.log(responses)
   if(question!=''){
   socket.emit('question',question);
 }

@@ -5,13 +5,14 @@
 
 body {
 	background-color: #f0db4f;
+	margin: 100px;
 }
 
 h1, p {
 	font-family: sans-serif;
 	text-align: center;
 	color: #323330;
-	font-size:  100px;
+	font-size:  80px;
 }
 
 
